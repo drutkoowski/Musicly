@@ -3,6 +3,7 @@
     <div v-show="!showForm">
       <h4 class="inline-block text-2xl font-bold">{{ song.modified_name }}</h4>
       <button
+        @click.prevent="deleteSong"
         class="ml-1 py-1 px-2 text-sm rounded text-white bg-red-600 float-right"
       >
         <i class="fa fa-times"></i>
@@ -34,6 +35,7 @@
             type="text"
             class="block w-full py-1.5 px-3 text-gray-800 border border-gray-300 transition duration-500 focus:outline-none focus:border-black rounded"
             placeholder="Enter Song Title"
+            @input="updateUnsavedFlag(true)"
           />
           <ErrorMessage class="text-red-600" name="modified_name" />
         </div>
@@ -44,6 +46,7 @@
             type="text"
             class="block w-full py-1.5 px-3 text-gray-800 border border-gray-300 transition duration-500 focus:outline-none focus:border-black rounded"
             placeholder="Enter Genre"
+            @input="updateUnsavedFlag(true)"
           />
           <ErrorMessage class="text-red-600" name="genre" />
         </div>
@@ -68,8 +71,7 @@
 </template>
 
 <script>
-import {} from "@/includes/firebase";
-import { songsCollection } from "../includes/firebase";
+import { songsCollection, storage } from "../includes/firebase";
 export default {
   name: "CompositionItem",
   props: {
@@ -84,6 +86,13 @@ export default {
     index: {
       type: Number,
       required: true,
+    },
+    removeSong: {
+      type: Function,
+      required: true,
+    },
+    updateUnsavedFlag: {
+      type: Function,
     },
   },
   data() {
@@ -115,7 +124,7 @@ export default {
       }
 
       this.updateSong(this.index, values);
-
+      this.updateUnsavedFlag(false);
       this.in_submission = false;
       this.alert_variant = "bg-green-500";
       this.alert_message = "Success!";
@@ -124,6 +133,13 @@ export default {
       this.showForm = false;
       this.in_submission = false;
       this.show_alert = false;
+    },
+    async deleteSong() {
+      const storageRef = storage.ref();
+      const songRef = storageRef.child(`songs/${this.song.original_name}`);
+      await songRef.delete();
+      await songsCollection.doc(this.song.docID).delete();
+      this.removeSong(this.index);
     },
   },
 };
