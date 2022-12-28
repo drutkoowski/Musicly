@@ -104,7 +104,6 @@ export default {
           }
         );
       });
-      console.log(files);
     },
     cancelUploads() {
       this.uploads.forEach((upload) => {
