@@ -17,5 +17,9 @@
     "login_register": "Login / Register",
     "manage": "Manage",
     "logout": "Logout"
+  },
+  "upload": {
+    "drop_files": "Drop your files here",
+    "upload": "Upload"
   }
 }

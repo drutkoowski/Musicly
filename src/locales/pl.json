@@ -17,5 +17,9 @@
     "login_register": "Logowanie / Rejestracja",
     "manage": "Zarządzaj",
     "logout": "Wyloguj"
+  },
+  "upload": {
+    "drop_files": "Przeciągnij pliki tutaj",
+    "upload": "Prześlij"
   }
 }
